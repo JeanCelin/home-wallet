@@ -6,6 +6,6 @@ const app = express()
 
 app.use(express.json())
 
-app.use("/category", categoryRoutes)
+app.use("/categories", categoryRoutes)
 
 export default app;

@@ -1,8 +1,10 @@
 import { Router } from "express";
-import {register} from "../controllers/category.controller"
+import {register, update} from "../controllers/category.controller"
 
 const router = Router()
 
-router.post("/register", register)
+router.post("/", register)
+router.put("/:id", update )
+
 
 export default router;
