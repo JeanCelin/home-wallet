@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { updateCategory, registerCategory, getCategories } from "../services/category.service";
+import { updateCategory, registerCategory, getCategories, removeCategory } from "../services/category.service";
 
 
 export async function register (req: Request, res: Response, next: NextFunction) {
@@ -34,6 +34,17 @@ export async function get(req: Request, res: Response, next: NextFunction){
     return res.status(200).json({categories})
     
   }catch(err){
+    return next(err)
+  }
+}
+
+export async function remove(req: Request, res: Response, next: NextFunction) {
+  try {
+    const id = Number(req.params.id)
+    await removeCategory(id)
+
+    return res.sendStatus(204)
+  } catch(err){
     return next(err)
   }
 }

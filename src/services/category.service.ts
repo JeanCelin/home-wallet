@@ -5,6 +5,7 @@ import {
   findCategoryByName,
   findCategories,
   updateCategoryById,
+  deleteCategory,
 } from "../repositories/category.repository";
 
 type RegisterCategoryData = {
@@ -72,19 +73,41 @@ export async function updateCategory(data: UpdateCategoryData) {
     );
   }
 }
-
 export async function getCategories() {
   try {
-    const categories = findCategories();
+    return await findCategories();
+  } catch (err) {
+    if (err instanceof AppError) {
+      throw err;
+    }
 
-    if (!categories)
+    throw new AppError(
+      "INTERNAL_SERVER_ERROR",
+      "Erro interno do servidor",
+      500,
+    );
+  }
+}
+
+export async function removeCategory(id: number) {
+  if (!id)
+    throw new AppError(
+      "VALIDATION_ERROR",
+      "Insira o ID da categoria a ser removida.",
+      400,
+    );
+
+  try {
+    const categoryToRemove = await findCategoryById(id);
+    if (!categoryToRemove)
       throw new AppError(
         "CATEGORY_NOT_FOUND",
-        "Ainda não existe nenhuma categoria, crie uma.",
-        400,
+        "Categoria não encontrada.",
+        404,
       );
+    await deleteCategory(id);
 
-    return categories;
+    return;
   } catch (err) {
     if (err instanceof AppError) {
       throw err;

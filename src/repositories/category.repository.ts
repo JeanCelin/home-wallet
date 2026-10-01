@@ -14,8 +14,8 @@ export function findCategoryById(id: number) {
   });
 }
 
-export function findCategories(){
-  return prisma.category.findMany()
+export function findCategories() {
+  return prisma.category.findMany();
 }
 
 export function findCategoryByName(name: string) {
@@ -32,5 +32,11 @@ export function updateCategoryById(id: number, name: string) {
     data: {
       name: name,
     },
+  });
+}
+
+export function deleteCategory(id: number) {
+  return prisma.category.delete({
+    where: { id },
   });
 }
