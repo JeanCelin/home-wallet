@@ -3,9 +3,9 @@ import {
   createCategory,
   findCategoryById,
   findCategoryByName,
+  findCategories,
   updateCategoryById,
 } from "../repositories/category.repository";
-
 
 type RegisterCategoryData = {
   name: string;
@@ -73,6 +73,31 @@ export async function updateCategory(data: UpdateCategoryData) {
   }
 }
 
+export async function getCategories() {
+  try {
+    const categories = findCategories();
+
+    if (!categories)
+      throw new AppError(
+        "CATEGORY_NOT_FOUND",
+        "Ainda não existe nenhuma categoria, crie uma.",
+        400,
+      );
+
+    return categories;
+  } catch (err) {
+    if (err instanceof AppError) {
+      throw err;
+    }
+
+    throw new AppError(
+      "INTERNAL_SERVER_ERROR",
+      "Erro interno do servidor",
+      500,
+    );
+  }
+}
+
 export async function findCategory(id: number) {
   if (!id)
     throw new AppError(
@@ -80,7 +105,6 @@ export async function findCategory(id: number) {
       "Forneça uma categoria  para a busca",
       400,
     );
-    
 
   try {
     const category = await findCategoryById(id);

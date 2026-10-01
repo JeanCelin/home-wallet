@@ -14,6 +14,10 @@ export function findCategoryById(id: number) {
   });
 }
 
+export function findCategories(){
+  return prisma.category.findMany()
+}
+
 export function findCategoryByName(name: string) {
   return prisma.category.findFirst({
     where: {
