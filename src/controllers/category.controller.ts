@@ -26,11 +26,11 @@ export async function register(
 export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = categoryIdSchema.parse(req.params);
-    const { name } = categorySchema.parse(req.body)
+    const { name } = categorySchema.parse(req.body);
 
     const category = await updateCategory({
       id,
-      name: req.body.name,
+      name,
     });
     return res.status(200).json({ category });
   } catch (err) {
@@ -50,7 +50,7 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 
 export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
-    const id = Number(req.params.id);
+    const { id } = categoryIdSchema.parse(req.params);
     await removeCategory(id);
 
     return res.sendStatus(204);
