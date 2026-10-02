@@ -7,7 +7,8 @@ import {
   registerTransaction,
   editTransaction,
   getTransactions,
-  removeTransaction
+  removeTransaction,
+  calcSummary,
 } from "../services/transaction.service";
 
 export async function register(
@@ -49,13 +50,21 @@ export async function get(req: Request, res: Response, next: NextFunction) {
 
 export async function remove(req: Request, res: Response, next: NextFunction) {
   try {
-
     const { id } = transactionIdSchema.parse(req.params);
-    
-    await removeTransaction(id)
-    
-    return res.sendStatus(204)
-  } catch(err){
-    next(err)
+
+    await removeTransaction(id);
+
+    return res.sendStatus(204);
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function summary(req: Request, res: Response, next: NextFunction) {
+  try {
+    const summary = await calcSummary();
+    return res.status(200).json({ summary });
+  } catch (err) {
+    next(err);
   }
 }

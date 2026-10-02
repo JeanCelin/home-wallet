@@ -1,3 +1,4 @@
+import { Prisma } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
 import type { CreateTransactionData } from "../schemas/transaction.schema";
 
@@ -53,5 +54,40 @@ export async function findTransactionById(id: number) {
 
 export async function deleteTransactionById(id: number) {
   await prisma.transaction.delete({ where: { id } });
-  return
+  return;
+}
+
+export async function incomeAggregate() {
+  const income = await prisma.transaction.aggregate({
+    where: {
+      type: "INCOME",
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  return income._sum.amount ?? new Prisma.Decimal(0);
+}
+
+export async function expenseAggregate() {
+  const expense = await prisma.transaction.aggregate({
+    where: {
+      type: "EXPENSE",
+    },
+    _sum: {
+      amount: true,
+    },
+  });
+
+  return expense._sum.amount ?? new Prisma.Decimal(0);
+}
+
+export async function transactionSummary(){
+  return prisma.transaction.groupBy({
+    by: ["type"],
+    _sum: {
+      amount: true
+    }
+  })
 }
