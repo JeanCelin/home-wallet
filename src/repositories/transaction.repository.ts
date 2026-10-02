@@ -40,3 +40,8 @@ export async function updateTransaction(
 
   return transaction;
 }
+
+export async function getAllTransactions() {
+  return await prisma.transaction.findMany()
+
+}

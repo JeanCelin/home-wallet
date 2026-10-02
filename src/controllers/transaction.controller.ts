@@ -6,6 +6,7 @@ import {
 import {
   registerTransaction,
   editTransaction,
+  getTransactions,
 } from "../services/transaction.service";
 
 export async function register(
@@ -30,6 +31,16 @@ export async function update(req: Request, res: Response, next: NextFunction) {
     const transaction = await editTransaction(id, data);
 
     return res.status(200).json({ transaction });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function get(req: Request, res: Response, next: NextFunction) {
+  try {
+    const transactions = await getTransactions();
+
+    return res.status(200).json({ transactions });
   } catch (err) {
     next(err);
   }

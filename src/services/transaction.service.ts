@@ -3,6 +3,7 @@ import { findCategoryById } from "../repositories/category.repository";
 import {
   createTransaction,
   updateTransaction,
+  getAllTransactions,
 } from "../repositories/transaction.repository";
 import type { CreateTransactionData } from "../schemas/transaction.schema";
 
@@ -28,4 +29,8 @@ export async function editTransaction(id: number, data: CreateTransactionData) {
   const transaction = await updateTransaction(id, data);
 
   return transaction;
+}
+
+export async function getTransactions(){
+  return await getAllTransactions()
 }
