@@ -1,11 +1,10 @@
 import { z } from "zod";
 
 export const transactionSchema = z.object({
-  date: z.coerce.date("Insira uma data válida"),
+  date: z.coerce.date("Insira uma data válida. Ex:2026-10-01"),
   type: z.enum(["INCOME", "EXPENSE"]),
   name: z
-    .string("Este campo aceita apenas textos.")
-    .min(1, "O nome não pode estar vazio")
+    .string("Este campo aceita apenas textos")
     .optional(),
   amount: z
     .number("Use apenas números")

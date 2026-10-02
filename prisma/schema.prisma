@@ -32,7 +32,7 @@ model Transaction {
   date DateTime
   type TransactionType //Income | Expense
   name String?
-  amount Decimal
+  amount Decimal @db.Decimal(15, 2)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
