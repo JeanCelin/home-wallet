@@ -7,6 +7,7 @@ import {
   registerTransaction,
   editTransaction,
   getTransactions,
+  removeTransaction
 } from "../services/transaction.service";
 
 export async function register(
@@ -43,5 +44,18 @@ export async function get(req: Request, res: Response, next: NextFunction) {
     return res.status(200).json({ transactions });
   } catch (err) {
     next(err);
+  }
+}
+
+export async function remove(req: Request, res: Response, next: NextFunction) {
+  try {
+
+    const { id } = transactionIdSchema.parse(req.params);
+    
+    await removeTransaction(id)
+    
+    return res.sendStatus(204)
+  } catch(err){
+    next(err)
   }
 }

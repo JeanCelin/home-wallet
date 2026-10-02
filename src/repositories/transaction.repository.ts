@@ -41,7 +41,17 @@ export async function updateTransaction(
   return transaction;
 }
 
-export async function getAllTransactions() {
-  return await prisma.transaction.findMany()
+export async function findAllTransactions() {
+  return await prisma.transaction.findMany();
+}
 
+export async function findTransactionById(id: number) {
+  return await prisma.transaction.findUnique({
+    where: { id },
+  });
+}
+
+export async function deleteTransactionById(id: number) {
+  await prisma.transaction.delete({ where: { id } });
+  return
 }

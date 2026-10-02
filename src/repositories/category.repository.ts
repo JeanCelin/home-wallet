@@ -40,3 +40,11 @@ export function deleteCategory(id: number) {
     where: { id },
   });
 }
+
+export function hasTransactions(id: number) {
+  return prisma.transaction.count({
+    where: {
+      categoryId: id,
+    },
+  });
+}

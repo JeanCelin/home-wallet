@@ -7,6 +7,7 @@ import {
   findCategories,
   updateCategoryById,
   deleteCategory,
+  hasTransactions,
 } from "../repositories/category.repository";
 
 type RegisterCategoryData = {
@@ -58,9 +59,9 @@ export async function getCategories() {
 }
 
 export async function removeCategory(id: number) {
-  const categoryToRemove = await findCategoryById(id);
+  const category = await findCategoryById(id);
 
-  if (!categoryToRemove) {
+  if (!category) {
     throw new AppError(
       "CATEGORY_NOT_FOUND",
       "Categoria não encontrada.",
@@ -68,7 +69,18 @@ export async function removeCategory(id: number) {
     );
   }
 
+    const transactionsCount = await hasTransactions(id);
+
+  if (transactionsCount > 0) {
+    throw new AppError(
+      "CATEGORY_IN_USE",
+      "Não é possível excluir uma categoria que possui transações.",
+      409,
+    );
+  }
+
   await deleteCategory(id);
+  return
 }
 
 export async function findCategory(id: number) {

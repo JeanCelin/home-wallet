@@ -3,7 +3,9 @@ import { findCategoryById } from "../repositories/category.repository";
 import {
   createTransaction,
   updateTransaction,
-  getAllTransactions,
+  findAllTransactions,
+  deleteTransactionById,
+  findTransactionById,
 } from "../repositories/transaction.repository";
 import type { CreateTransactionData } from "../schemas/transaction.schema";
 
@@ -31,6 +33,20 @@ export async function editTransaction(id: number, data: CreateTransactionData) {
   return transaction;
 }
 
-export async function getTransactions(){
-  return await getAllTransactions()
+export async function getTransactions() {
+  return await findAllTransactions();
+}
+
+export async function removeTransaction(id: number) {
+  const foundCategory = await findTransactionById(id);
+  if (!foundCategory)
+    throw new AppError(
+      "TRANSACTION_NOT_FOUND",
+      "Transação não encontrada, verifique o Id e tente novamente",
+      404,
+    );
+
+  await deleteTransactionById(id);
+
+  return;
 }
