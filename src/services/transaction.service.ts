@@ -1,6 +1,9 @@
 import { AppError } from "../errors/app-error";
+
 import { Prisma } from "../generated/prisma/client";
+
 import { findCategoryById } from "../repositories/category.repository";
+
 import {
   createTransaction,
   updateTransaction,
@@ -9,33 +12,50 @@ import {
   findTransactionById,
   transactionSummary,
 } from "../repositories/transaction.repository";
+
 import type { CreateTransactionData } from "../schemas/transaction.schema";
+
 import type { TransactionFilters } from "../types/transaction-filters";
 
 import { sub } from "../utils/calc";
+
+import { calendarDateToDate, getToday } from "../utils/date";
 
 export async function registerTransaction(data: CreateTransactionData) {
   const category = await findCategoryById(data.categoryId);
 
   if (!category) {
-    throw new AppError("CATEGORY_NOT_FOUND", "Categoria não encontrada", 404);
+    throw new AppError(
+      "CATEGORY_NOT_FOUND",
+      "Categoria não encontrada",
+      404,
+    );
   }
 
-  const transaction = await createTransaction(data);
+  const date = calendarDateToDate(data.date ?? getToday());
 
-  return transaction;
+  return createTransaction(data, date);
 }
 
-export async function editTransaction(id: number, data: CreateTransactionData) {
+export async function editTransaction(
+  id: number,
+  data: CreateTransactionData,
+) {
   const category = await findCategoryById(data.categoryId);
 
   if (!category) {
-    throw new AppError("CATEGORY_NOT_FOUND", "Categoria não encontrada", 404);
+    throw new AppError(
+      "CATEGORY_NOT_FOUND",
+      "Categoria não encontrada",
+      404,
+    );
   }
 
-  const transaction = await updateTransaction(id, data);
+  const date = data.date
+    ? calendarDateToDate(data.date)
+    : undefined;
 
-  return transaction;
+  return updateTransaction(id, data, date);
 }
 
 export async function getTransactions(filters: TransactionFilters) {
@@ -43,17 +63,17 @@ export async function getTransactions(filters: TransactionFilters) {
 }
 
 export async function removeTransaction(id: number) {
-  const foundCategory = await findTransactionById(id);
-  if (!foundCategory)
+  const foundTransaction = await findTransactionById(id);
+
+  if (!foundTransaction) {
     throw new AppError(
       "TRANSACTION_NOT_FOUND",
       "Transação não encontrada, verifique o Id e tente novamente",
       404,
     );
+  }
 
   await deleteTransactionById(id);
-
-  return;
 }
 
 export async function calcSummary() {

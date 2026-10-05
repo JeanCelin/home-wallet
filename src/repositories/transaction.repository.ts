@@ -1,12 +1,16 @@
-import { Prisma, TransactionType } from "../generated/prisma/client";
 import { prisma } from "../lib/prisma";
+
 import type { CreateTransactionData } from "../schemas/transaction.schema";
+
 import type { TransactionFilters } from "../types/transaction-filters";
 
-export async function createTransaction(data: CreateTransactionData) {
+export async function createTransaction(
+  data: CreateTransactionData,
+  date: Date,
+) {
   const transaction = await prisma.transaction.create({
     data: {
-      date: data.date,
+      date,
       type: data.type,
       amount: data.amount,
       name: data.name ?? null,
@@ -24,11 +28,12 @@ export async function createTransaction(data: CreateTransactionData) {
 export async function updateTransaction(
   id: number,
   data: CreateTransactionData,
+  date?: Date,
 ) {
   const transaction = await prisma.transaction.update({
     where: { id },
     data: {
-      date: data.date,
+      ...(date && { date }),
       type: data.type,
       amount: data.amount,
       name: data.name ?? null,
@@ -49,7 +54,6 @@ export async function findAllTransactions(filters: TransactionFilters) {
       ...(filters.type && {
         type: filters.type,
       }),
-
       ...(filters.name && {
         name: {
           contains: filters.name,
@@ -68,7 +72,6 @@ export async function findTransactionById(id: number) {
 
 export async function deleteTransactionById(id: number) {
   await prisma.transaction.delete({ where: { id } });
-  return;
 }
 
 export async function transactionSummary() {

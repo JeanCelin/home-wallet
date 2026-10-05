@@ -29,7 +29,7 @@ enum TransactionType {
 
 model Transaction {
   id Int @id @default(autoincrement())
-  date DateTime
+  date DateTime @db.Date
   type TransactionType //Income | Expense
   name String?
   amount Decimal @db.Decimal(15, 2)
