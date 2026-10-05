@@ -10,6 +10,8 @@ import {
   transactionSummary,
 } from "../repositories/transaction.repository";
 import type { CreateTransactionData } from "../schemas/transaction.schema";
+import type { TransactionFilters } from "../types/transaction-filters";
+
 import { sub } from "../utils/calc";
 
 export async function registerTransaction(data: CreateTransactionData) {
@@ -36,8 +38,8 @@ export async function editTransaction(id: number, data: CreateTransactionData) {
   return transaction;
 }
 
-export async function getTransactions() {
-  return await findAllTransactions();
+export async function getTransactions(filters: TransactionFilters) {
+  return await findAllTransactions(filters);
 }
 
 export async function removeTransaction(id: number) {
@@ -63,9 +65,7 @@ export async function calcSummary() {
   for (const group of groupBy) {
     if (group.type === "INCOME" && group._sum.amount != null) {
       income = group._sum.amount;
-    }
-
-    else if (group.type === "EXPENSE" && group._sum.amount != null) {
+    } else if (group.type === "EXPENSE" && group._sum.amount != null) {
       expense = group._sum.amount;
     }
   }

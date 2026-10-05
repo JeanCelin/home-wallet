@@ -23,3 +23,4 @@ export interface ApiErrorResponse {
   error: ErrorCode;
   message: string;
 }
+

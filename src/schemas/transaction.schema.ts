@@ -26,4 +26,9 @@ export const transactionIdSchema = z.object({
     .positive("Use apenas números positivos"),
 });
 
+export const transactionQuerySchema = z.object({
+    type: z.enum(["INCOME", "EXPENSE"]).optional(),
+  name: z.string().trim().min(1).optional(),
+});
+
 export type CreateTransactionData = z.infer<typeof transactionSchema>;

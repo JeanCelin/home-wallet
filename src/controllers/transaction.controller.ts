@@ -1,6 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import {
   transactionIdSchema,
+  transactionQuerySchema,
   transactionSchema,
 } from "../schemas/transaction.schema";
 import {
@@ -10,6 +11,7 @@ import {
   removeTransaction,
   calcSummary,
 } from "../services/transaction.service";
+
 
 export async function register(
   req: Request,
@@ -25,7 +27,7 @@ export async function register(
     next(err);
   }
 }
-1;
+
 export async function update(req: Request, res: Response, next: NextFunction) {
   try {
     const { id } = transactionIdSchema.parse(req.params);
@@ -40,7 +42,9 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const transactions = await getTransactions();
+    const filters = transactionQuerySchema.parse(req.query)
+
+    const transactions = await getTransactions(filters);
 
     return res.status(200).json({ transactions });
   } catch (err) {
