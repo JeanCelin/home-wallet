@@ -5,7 +5,7 @@ import {
   getCategories,
   removeCategory,
 } from "../services/category.service";
-import { categoryIdSchema, categorySchema } from "../schemas/category.schema";
+import { categoryIdSchema, categoryQuerySchema, categorySchema } from "../schemas/category.schema";
 
 export async function register(
   req: Request,
@@ -40,7 +40,9 @@ export async function update(req: Request, res: Response, next: NextFunction) {
 
 export async function get(req: Request, res: Response, next: NextFunction) {
   try {
-    const categories = await getCategories();
+    const filters = categoryQuerySchema.parse(req.query)
+
+    const categories = await getCategories(filters);
 
     return res.status(200).json({ categories });
   } catch (err) {

@@ -9,6 +9,7 @@ import {
   deleteCategory,
   hasTransactions,
 } from "../repositories/category.repository";
+import type { CategoryFilters } from "../types/category-filters";
 
 type RegisterCategoryData = {
   name: string;
@@ -54,8 +55,8 @@ export async function updateCategory(data: UpdateCategoryData) {
   return categoryUpdated;
 }
 
-export async function getCategories() {
-  return await findCategories();
+export async function getCategories(filters: CategoryFilters) {
+  return await findCategories(filters);
 }
 
 export async function removeCategory(id: number) {

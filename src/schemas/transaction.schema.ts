@@ -3,9 +3,7 @@ import { z } from "zod";
 export const transactionSchema = z.object({
   date: z.iso.date("Insira uma data válida. Ex: 2026-10-01").optional(),
   type: z.enum(["INCOME", "EXPENSE"]),
-  name: z
-    .string("Este campo aceita apenas textos")
-    .optional(),
+  name: z.string("Este campo aceita apenas textos").optional(),
   amount: z
     .number("Use apenas números")
     .positive("Use apenas números positivos")
@@ -27,8 +25,13 @@ export const transactionIdSchema = z.object({
 });
 
 export const transactionQuerySchema = z.object({
-    type: z.enum(["INCOME", "EXPENSE"]).optional(),
-  name: z.string().trim().min(1).optional(),
+  type: z.enum(["INCOME", "EXPENSE"]).optional(),
+  name: z.preprocess((name) => {
+    if (typeof name === "string") {
+      return [name];
+    }
+    return name;
+  }, z.array(z.string()).optional()),
 });
 
 export type CreateTransactionData = z.infer<typeof transactionSchema>;

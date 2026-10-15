@@ -54,11 +54,13 @@ export async function findAllTransactions(filters: TransactionFilters) {
       ...(filters.type && {
         type: filters.type,
       }),
-      ...(filters.name && {
-        name: {
-          contains: filters.name,
-          mode: "insensitive",
-        },
+      ...(filters.name?.length && {
+        OR: filters.name.map((name) => ({
+          name: {
+            contains: name,
+            mode: "insensitive",
+          },
+        })),
       }),
     },
   });

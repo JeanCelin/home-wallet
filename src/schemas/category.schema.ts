@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { string, z } from "zod";
 
 export const categorySchema = z.object({
   name: z
@@ -7,5 +7,18 @@ export const categorySchema = z.object({
 });
 
 export const categoryIdSchema = z.object({
-  id: z.coerce.number("Adicione um número inteiro válido").int("Use apenas números inteiros").positive("Use apenas números positivos")
-})
+  id: z.coerce
+    .number("Adicione um número inteiro válido")
+    .int("Use apenas números inteiros")
+    .positive("Use apenas números positivos"),
+});
+
+export const categoryQuerySchema = z.object({
+  name: z.preprocess((value)=>{
+    if(typeof value === "string"){
+      return [value];
+    }
+
+    return value
+  },z.array(z.string()).optional())
+});
