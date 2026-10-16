@@ -40,3 +40,74 @@ model Transaction {
   category Category @relation(fields: [categoryId], references: [id])
 }
 
+// ───────────────────────────────── Market ─────────────────────────────────
+model Market {
+  id        Int        @id @default(autoincrement())
+  name      String
+
+  purchases Purchase[]
+
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+enum Unit {
+  UN
+  KG
+  G
+  L
+  ML
+}
+
+model Product {
+  id           Int                   @id @default(autoincrement())
+  name         String
+  currentPrice Decimal @db.Decimal(15, 2)
+  unit Unit
+
+  purchaseItems PurchaseItem[]
+  priceHistory  ProductPriceHistory[]
+
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+}
+
+model Purchase {
+  id          Int            @id @default(autoincrement())
+  marketId    Int
+  purchasedAt DateTime
+
+  market      Market         @relation(fields: [marketId], references: [id])
+  items       PurchaseItem[]
+
+  createdAt   DateTime       @default(now())
+
+  @@index([marketId])
+}
+
+model PurchaseItem {
+  id         Int      @id @default(autoincrement())
+  purchaseId Int
+  productId Int
+
+  quantity    Decimal @db.Decimal(15, 2)
+  unitPrice  Decimal @db.Decimal(15, 2)
+
+  purchase   Purchase @relation(fields: [purchaseId], references: [id])
+  product    Product  @relation(fields: [productId], references: [id])
+
+  @@index([purchaseId])
+  @@index([productId])
+}
+
+model ProductPriceHistory {
+  id        Int      @id @default(autoincrement())
+  productId Int
+
+  price     Decimal @db.Decimal(15, 2)
+  createdAt DateTime @default(now())
+
+  product   Product  @relation(fields: [productId], references: [id])
+
+  @@index([productId])
+}

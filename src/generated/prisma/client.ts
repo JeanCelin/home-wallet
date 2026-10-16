@@ -51,3 +51,28 @@ export type Category = Prisma.CategoryModel
  * 
  */
 export type Transaction = Prisma.TransactionModel
+/**
+ * Model Market
+ * 
+ */
+export type Market = Prisma.MarketModel
+/**
+ * Model Product
+ * 
+ */
+export type Product = Prisma.ProductModel
+/**
+ * Model Purchase
+ * 
+ */
+export type Purchase = Prisma.PurchaseModel
+/**
+ * Model PurchaseItem
+ * 
+ */
+export type PurchaseItem = Prisma.PurchaseItemModel
+/**
+ * Model ProductPriceHistory
+ * 
+ */
+export type ProductPriceHistory = Prisma.ProductPriceHistoryModel

@@ -17,7 +17,8 @@ export type ErrorCode =
   | "INVALID_CLIENT"
   | "FORBIDDEN"
   | "TRANSACTION_NOT_FOUND"
-  | "CATEGORY_IN_USE";
+  | "CATEGORY_IN_USE"
+  | "CONTENT_NEGOCIATION_INVALID"
 
 export interface ApiErrorResponse {
   error: ErrorCode;

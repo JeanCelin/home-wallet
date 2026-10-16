@@ -10,4 +10,9 @@
  */
 export type * from './models/Category'
 export type * from './models/Transaction'
+export type * from './models/Market'
+export type * from './models/Product'
+export type * from './models/Purchase'
+export type * from './models/PurchaseItem'
+export type * from './models/ProductPriceHistory'
 export type * from './commonInputTypes'

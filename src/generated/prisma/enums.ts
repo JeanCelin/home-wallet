@@ -15,3 +15,14 @@ export const TransactionType = {
 } as const
 
 export type TransactionType = (typeof TransactionType)[keyof typeof TransactionType]
+
+
+export const Unit = {
+  UN: 'UN',
+  KG: 'KG',
+  G: 'G',
+  L: 'L',
+  ML: 'ML'
+} as const
+
+export type Unit = (typeof Unit)[keyof typeof Unit]
